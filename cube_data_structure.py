@@ -63,3 +63,13 @@ def checkCompletedCube(state):
         if side[1:] != side[:-1]:
             return False
     return True
+
+
+def printPath(goal):
+    stack = []
+    while goal['parent'] is not None:
+        stack.append(goal['state'])
+        goal = goal['parent']
+    stack.append(goal['state'])
+    while len(stack) != 0:
+        print(stack.pop())

@@ -4,6 +4,7 @@ from ids import IterativeDeepeningSearch
 
 # cube data structure
 cube = [[0 for i in range(4)] for j in range(6)]
+goal = [[1, 1, 1, 1], [3, 3, 3, 3], [5, 5, 5, 5], [2, 2, 2, 2], [6, 6, 6, 6], [4, 4, 4, 4]]
 
 # enriching cube data structures via inputs
 for i in range(6):
@@ -28,7 +29,7 @@ if algorithmType == 1:
     firstLimit = int(input())
     IterativeDeepeningSearch(cube, firstLimit).run()
 elif algorithmType == 2:
-    BidirectionalSearch(cube).run()
+    BidirectionalSearch(cube, goal).run()
 elif algorithmType == 3:
     AStarAlgorithm(cube).run()
 
@@ -55,3 +56,19 @@ elif algorithmType == 3:
 # 2 3 2 3
 # 6 4 6 5
 # 4 1 5 1
+
+# 1 2 3 3
+# 3 4 3 5
+# 2 2 4 4
+# 1 6 2 6
+# 6 6 4 5
+# 5 1 5 1
+
+# three in depth
+# 1 2 3 4
+# 5 6 5 6
+# 4 2 4 2
+# 5 6 5 6
+# 2 1 4 3
+# 3 1 3 1
+
