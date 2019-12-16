@@ -1,8 +1,7 @@
 class BidirectionalSearch:
 
-    def __init__(self, cube, rotates):
+    def __init__(self, cube):
         self.cube = cube
-        self.rotates = rotates
 
     def run(self):
         return

@@ -1,62 +1,40 @@
-from graph import Graph
-import copy
+from cube_data_structure import checkCompletedCube, buildNextStates
 
 
 class IterativeDeepeningSearch:
 
-    def __init__(self, cube, positions, firstLimit):
+    def __init__(self, cube, firstLimit):
         self.cube = cube
-        self.positions = positions
         self.firstLimit = firstLimit
-        self.graph = Graph()
+        self.producedNodes = 1
+        self.expandedNodes = 0
+        self.answerDepth = 0
+        self.algorithmFinished = False
 
-    def buildNextStates(self, state):
-        nextStates = []
-        for position in self.positions:
-            tmp = copy.deepcopy(state)
-            for j in range(3):
-                tmp2 = copy.deepcopy(tmp)
-                # one single rotate started
-                for i in range(3):
-                    tmp[position[i + 1]['side']][position[i + 1]['indices'][0]] = \
-                        tmp2[position[i]['side']][position[i]['indices'][0]]
-                    tmp[position[i + 1]['side']][position[i + 1]['indices'][1]] = \
-                        tmp2[position[i]['side']][position[i]['indices'][1]]
-                tmp[position[0]['side']][position[0]['indices'][0]] = \
-                    tmp2[position[3]['side']][position[3]['indices'][0]]
-                tmp[position[0]['side']][position[0]['indices'][1]] = \
-                    tmp2[position[3]['side']][position[3]['indices'][1]]
-                # one single rotate ended
-                # neighbour rotate ended
-                neighbour = position[0]['neighbourRotation']
-                tmp[neighbour][0] = tmp2[neighbour][1]
-                tmp[neighbour][1] = tmp2[neighbour][3]
-                tmp[neighbour][2] = tmp2[neighbour][0]
-                tmp[neighbour][3] = tmp2[neighbour][2]
-                # neighbour rotate started
-                nextStates.append(tmp)
-        return nextStates
-
-    def dlsAlgorithm(self, state, limit):
-        if self.checkCompletedCube(state):
-            return True
-        if limit <= 0: return False
-        for nextState in self.buildNextStates(state):
-            if self.dlsAlgorithm(nextState, limit - 1):
+    def dlsAlgorithm(self, state, limit, maxLimit):
+        if not self.algorithmFinished:
+            if checkCompletedCube(state):
+                self.answerDepth = maxLimit - limit
                 return True
-        return False
+            if limit <= 0:
+                return False
+            self.producedNodes += 12
+            self.expandedNodes += 1
+            for nextState in buildNextStates(state):
+                if self.dlsAlgorithm(nextState, limit - 1, maxLimit):
+                    self.algorithmFinished = True
+                    return True
+            return False
 
     def idsAlgorithm(self, state, limit):
-        for i in range(limit, 20):
-            if self.dlsAlgorithm(state, limit):
+        for maxLimit in range(limit, 20):
+            if self.dlsAlgorithm(state, maxLimit, maxLimit):
                 return True
         return False
 
-    def checkCompletedCube(self, state):
-        for side in state:
-            if side[1:] != side[:-1]:
-                return False
-        return True
-
     def run(self):
-        print(self.idsAlgorithm(self.cube, self.firstLimit))
+        print('Found: ', self.idsAlgorithm(self.cube, self.firstLimit))
+        print('Produced Nodes: ', self.producedNodes)
+        print('Expanded Nodes: ', self.expandedNodes)
+        print('Answer Depth: ', self.answerDepth)
+        print('Maximum Nodes In Memory: ', 12*self.answerDepth+1)
