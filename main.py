@@ -4,7 +4,7 @@ from ids import IterativeDeepeningSearch
 
 # cube data structure
 cube = [[0 for i in range(4)] for j in range(6)]
-goal = [[1, 1, 1, 1], [3, 3, 3, 3], [5, 5, 5, 5], [2, 2, 2, 2], [6, 6, 6, 6], [4, 4, 4, 4]]
+goal = [[5, 5, 5, 5], [1, 1, 1, 1], [6, 6, 6, 6], [2, 2, 2, 2], [4, 4, 4, 4], [3, 3, 3, 3]]
 
 # enriching cube data structures via inputs
 for i in range(6):
@@ -80,6 +80,13 @@ elif algorithmType == 3:
 # 1 6 4 2
 # 1 4 5 2
 
-
+# six in depth
+# goal = [[5, 5, 5, 5], [1, 1, 1, 1], [6, 6, 6, 6], [2, 2, 2, 2], [4, 4, 4, 4], [3, 3, 3, 3]]
+# 4 4 6 2
+# 3 5 3 6
+# 1 3 4 2
+# 5 3 6 4
+# 1 5 5 2
+# 1 6 1 2
 
 
