@@ -23,7 +23,6 @@ class AStarAlgorithm:
         frontier = [{'state': cube, 'depth': 0, 'parent': None}]
         while True:
             currNode = self.getMinFromFrontier(frontier)
-            print(currNode)
             if checkCompletedCube(currNode['state']):
                 self.goal = currNode
                 break
