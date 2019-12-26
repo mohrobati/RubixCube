@@ -12,21 +12,11 @@ class AStarAlgorithm:
         min = math.inf
         bestNode = None
         for node in frontier:
-            if self.getHeuristic(node['state']) + node['depth'] < min:
-                min = self.getHeuristic(node['state']) + node['depth']
+            f = self.getHeuristic(node['state']) + node['depth']
+            if f < min:
+                min = f
                 bestNode = node
         return bestNode
-
-    def aStarAlgorithm(self, cube):
-        frontier = [{'state': cube, 'depth': 0, 'parent': None}]
-        while True:
-            currNode = self.getMinFromFrontier(frontier)
-            if checkCompletedCube(currNode['state']):
-                self.goal = currNode
-                break
-            for child in buildNextStates(currNode['state']):
-                frontier.append({'state': child, 'depth': currNode['depth']+1, 'parent': currNode})
-            frontier.remove(currNode)
 
     def getHeuristic(self, state):
         heuristic = 0
@@ -39,6 +29,29 @@ class AStarAlgorithm:
             elif differentColors == 2:
                 heuristic += 1
         return heuristic
+
+    def aStarAlgorithm(self, cube):
+        frontier = [{'state': cube, 'depth': 0, 'parent': None}]
+        exploredSet = []
+        while frontier:
+            currNode = self.getMinFromFrontier(frontier)
+            exploredSet.append(currNode['state'])
+            frontier.remove(currNode)
+            if checkCompletedCube(currNode['state']):
+                self.goal = currNode
+                break
+            for child in buildNextStates(currNode['state']):
+                jump = False
+                for node in frontier:
+                    if node['state'] == child:
+                        if self.getHeuristic(node['state']) + node['depth'] < self.getHeuristic(child) + node['depth'] + 1:
+                            jump = True
+                if not jump:
+                    if child in exploredSet:
+                        if self.getHeuristic(currNode['state']) + currNode['depth'] < self.getHeuristic(child) + currNode['depth'] + 1:
+                            continue
+                    else:
+                        frontier.append({'state': child, 'depth': currNode['depth'] + 1, 'parent': currNode})
 
     def run(self):
         self.aStarAlgorithm(self.cube)

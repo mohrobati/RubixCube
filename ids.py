@@ -29,7 +29,7 @@ class IterativeDeepeningSearch:
             return False
 
     def idsAlgorithm(self, state, limit):
-        for maxLimit in range(limit, 20):
+        for maxLimit in range(limit, 50):
             if self.dlsAlgorithm({'state': state, 'parent': None}, maxLimit, maxLimit):
                 return True
         return False
