@@ -6,6 +6,11 @@ class AStarAlgorithm:
 
     def __init__(self, cube):
         self.cube = cube
+        self.producedNodes = 1
+        self.maxMemory = 1
+        self.currentlyInMemory = 1
+        self.expandedNodes = 0
+        self.answerDepth = 0
         self.goal = None
 
     def getMinFromFrontier(self, frontier):
@@ -40,20 +45,23 @@ class AStarAlgorithm:
             if checkCompletedCube(currNode['state']):
                 self.goal = currNode
                 break
+            self.producedNodes += 6
+            self.currentlyInMemory += 6
+            self.maxMemory = max(self.currentlyInMemory, self.maxMemory)
+            self.expandedNodes += 1
             for child in buildNextStates(currNode['state']):
-                jump = False
-                for node in frontier:
-                    if node['state'] == child:
-                        if self.getHeuristic(node['state']) + node['depth'] < self.getHeuristic(child) + node['depth'] + 1:
-                            jump = True
-                if not jump:
-                    if child in exploredSet:
-                        if self.getHeuristic(currNode['state']) + currNode['depth'] < self.getHeuristic(child) + currNode['depth'] + 1:
-                            continue
-                    else:
-                        frontier.append({'state': child, 'depth': currNode['depth'] + 1, 'parent': currNode})
+                if child in exploredSet:
+                    if self.getHeuristic(currNode['state']) + currNode['depth'] < self.getHeuristic(child) + currNode['depth'] + 1:
+                        continue
+                else:
+                    self.currentlyInMemory += 1
+                    frontier.append({'state': child, 'depth': currNode['depth'] + 1, 'parent': currNode})
 
     def run(self):
         self.aStarAlgorithm(self.cube)
+        print('Produced Nodes: ', self.producedNodes)
+        print('Expanded Nodes: ', self.expandedNodes)
+        print('Answer Depth: ', self.goal['depth'])
+        print('Maximum Nodes In Memory: ', self.maxMemory)
         print('Path: ')
         printPath(self.goal)

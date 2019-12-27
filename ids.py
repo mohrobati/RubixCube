@@ -7,6 +7,8 @@ class IterativeDeepeningSearch:
         self.cube = cube
         self.firstLimit = firstLimit
         self.producedNodes = 1
+        self.maxMemory = 1
+        self.currentlyInMemory = 1
         self.expandedNodes = 0
         self.answerDepth = 0
         self.goal = None
@@ -20,12 +22,15 @@ class IterativeDeepeningSearch:
                 return True
             if limit <= 0:
                 return False
-            self.producedNodes += 12
+            self.producedNodes += 6
+            self.currentlyInMemory += 6
+            self.maxMemory = max(self.currentlyInMemory, self.maxMemory)
             self.expandedNodes += 1
             for nextState in buildNextStates(state['state']):
-                if self.dlsAlgorithm({'state':nextState, 'parent': state}, limit - 1, maxLimit):
+                if self.dlsAlgorithm({'state': nextState, 'parent': state}, limit - 1, maxLimit):
                     self.algorithmFinished = True
                     return True
+                self.currentlyInMemory -= 1
             return False
 
     def idsAlgorithm(self, state, limit):
@@ -39,7 +44,6 @@ class IterativeDeepeningSearch:
         print('Produced Nodes: ', self.producedNodes)
         print('Expanded Nodes: ', self.expandedNodes)
         print('Answer Depth: ', self.answerDepth)
-        print('Maximum Nodes In Memory: ', 12*self.answerDepth+1)
+        print('Maximum Nodes In Memory: ', self.maxMemory)
         print('Path: ')
         printPath(self.goal)
-
